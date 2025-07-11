@@ -1,6 +1,6 @@
 {
   "name": "create-friendly-frontend",
-  "version": "1.0.3-next.1",
+  "version": "1.0.3-next.2",
   "bin": {
     "create-friendly-frontend": "./index.js"
   },
