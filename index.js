@@ -2,35 +2,35 @@
 
 import prompts from 'prompts'
 import path from 'path'
-import { fileURLToPath } from 'url'
-import fs from 'fs/promises'
 import { existsSync, readdirSync, rmSync } from 'fs'
 import degit from 'degit'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-
 const run = async () => {
-  const { ts } = await prompts({
-    type: 'confirm',
-    name: 'ts',
-    message: 'Use TypeScript version?',
-    initial: true
+  const { useTS } = await prompts({
+    type: 'select',
+    name: 'useTS',
+    message: 'Choose a template:',
+    choices: [
+      { title: 'JavaScript', value: false },
+      { title: 'TypeScript', value: true },
+    ],
+    initial: 0
   })
 
   const { name } = await prompts({
     type: 'text',
     name: 'name',
-    message: 'Project name:',
-    initial: 'my-app'
+    message: 'Project name (or "." to use current directory):',
+    placeholder: 'my-app',
+    validate: name => name.trim().length ? true : 'Please enter a project name.'
   })
 
-  const repo = ts
+  const repo = useTS
     ? 'AleksanderLamkov/friendly-frontend-starter-ts'
     : 'AleksanderLamkov/friendly-frontend-starter'
 
   const targetDir = name.trim() === '.' ? process.cwd() : path.resolve(process.cwd(), name)
 
-  // Проверка существующей непустой директории
   if (existsSync(targetDir) && readdirSync(targetDir).length > 0) {
     const { action } = await prompts({
       type: 'select',
@@ -64,16 +64,25 @@ const run = async () => {
     verbose: false
   })
 
-  console.log(`\n📦 Downloading template into "${name}"...\n`)
+  const visibleName = name.trim() === '.' ? path.basename(targetDir) : name
+  console.log(`\n📦 Downloading template into "${visibleName}"...\n`)
+
   try {
     await emitter.clone(targetDir)
+    console.log(`📁 Project created in: ${targetDir}`)
   } catch (err) {
     console.error(`❌ Failed to clone template: ${err.message}`)
     process.exit(1)
   }
 
+  console.log('🚀 Installing dependencies...\n')
+
   console.log('\n✅ Done! Now run:')
-  if (name.trim() !== '.') console.log(`\n  cd ${name}`)
+
+  if (name.trim() !== '.') {
+    console.log(`\n  cd ${name}`)
+  }
+
   console.log('  npm install')
   console.log('  npm run start\n')
 }
