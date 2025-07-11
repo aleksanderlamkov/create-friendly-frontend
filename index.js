@@ -16,7 +16,7 @@ const showLogo = () => {
 
 const run = async () => {
   console.log(cyan('┃'))
-  console.log(cyan(`┃ ${bold('◉ Step 1:')} Choose a template:`))
+  console.log(cyan(`┃ ${bold('◉ Step 1 →')} Choose a template:`))
   const { useTS } = await prompts({
     type: 'select',
     name: 'useTS',
@@ -30,7 +30,7 @@ const run = async () => {
   console.log(cyan(`┃ ${green(`You selected the ${useTS ? 'TypeScript' : 'JavaScript'} template`)}`))
   console.log(cyan('┃'))
 
-  console.log(cyan(`┃ ${bold('◉ Step 2:')} Name your project (or "." to use current directory):`))
+  console.log(cyan(`┃ ${bold('◉ Step 2 →')} Name your project (or "." to use current directory):`))
   const { name } = await prompts({
     type: 'text',
     name: 'name',
@@ -45,7 +45,7 @@ const run = async () => {
   console.log(cyan(`┃ ${green(`Project will be created in: ${targetDir}`)}`))
   console.log(cyan('┃'))
 
-  console.log(cyan(`┃ ${bold('◉ Step 3:')} Checking target directory...`))
+  console.log(cyan(`┃ ${bold('◉ Step 3 →')} Checking target directory...`))
   const repo = useTS
     ? 'AleksanderLamkov/friendly-frontend-starter-ts'
     : 'AleksanderLamkov/friendly-frontend-starter'
@@ -79,7 +79,7 @@ const run = async () => {
     console.log(cyan(`┃ ${green('Target directory is empty. Proceeding...\n')}`))
   }
 
-  console.log(cyan(`┃ ${bold('◉ Step 4:')} Downloading template into "${visibleName}"...`))
+  console.log(cyan(`┃ ${bold('◉ Step 4 →')} Downloading template into "${visibleName}"...`))
   const emitter = degit(repo, {
     cache: false,
     force: true,
@@ -95,8 +95,9 @@ const run = async () => {
   }
 
   console.log(cyan('┃'))
-  console.log(cyan(`┃ ${bold('◉ Final step:')} Next commands:`))
-
+  console.log(cyan(`┃ ${bold('◉ Final step →')} Run the following commands:\n`))
+  console.log(cyan('┃'))
+  
   if (name.trim() !== '.') {
     console.log(`\n  cd ${name}`)
   }
