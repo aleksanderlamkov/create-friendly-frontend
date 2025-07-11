@@ -75,8 +75,6 @@ const run = async () => {
     process.exit(1)
   }
 
-  console.log('🚀 Installing dependencies...\n')
-
   console.log('\n✅ Done! Now run:')
 
   if (name.trim() !== '.') {
