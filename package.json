@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/aleksanderlamkov/create-friendly-frontend#readme",
   "dependencies": {
+    "degit": "^2.8.4",
     "execa": "^9.6.0",
     "prompts": "^2.4.2"
   }
