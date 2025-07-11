@@ -20,6 +20,7 @@ const run = async () => {
   const { useTS } = await prompts({
     type: 'select',
     name: 'useTS',
+    message: '',
     choices: [
       { title: 'JavaScript', value: false },
       { title: 'TypeScript', value: true },
@@ -33,6 +34,7 @@ const run = async () => {
   const { name } = await prompts({
     type: 'text',
     name: 'name',
+    message: '',
     placeholder: 'my-app',
     validate: name => name.trim().length ? true : 'Please enter a project name.'
   })
