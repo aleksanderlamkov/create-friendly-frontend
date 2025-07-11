@@ -27,7 +27,7 @@ const run = async () => {
     ],
     initial: 0
   })
-  console.log(cyan(`┃ ${green(`✔ You selected the ${useTS ? 'TypeScript' : 'JavaScript'} template`)}`))
+  console.log(cyan(`┃ ${green(`You selected the ${useTS ? 'TypeScript' : 'JavaScript'} template`)}`))
   console.log(cyan('┃'))
 
   console.log(cyan(`┃ ${bold('◉ Step 2:')} Name your project (or "." to use current directory):`))
@@ -42,7 +42,7 @@ const run = async () => {
   const targetDir = name.trim() === '.' ? process.cwd() : path.resolve(process.cwd(), name)
   const visibleName = name.trim() === '.' ? path.basename(targetDir) : name
 
-  console.log(cyan(`┃ ${green(`✔ Project will be created in: ${targetDir}`)}`))
+  console.log(cyan(`┃ ${green(`Project will be created in: ${targetDir}`)}`))
   console.log(cyan('┃'))
 
   console.log(cyan(`┃ ${bold('◉ Step 3:')} Checking target directory...`))
@@ -75,6 +75,8 @@ const run = async () => {
       }
       console.log('🧹 Cleared directory.')
     }
+  } else {
+    console.log(cyan(`┃ ${green('Target directory is empty. Proceeding...\n')}`))
   }
 
   console.log(cyan(`┃ ${bold('◉ Step 4:')} Downloading template into "${visibleName}"...`))
@@ -86,7 +88,7 @@ const run = async () => {
 
   try {
     await emitter.clone(targetDir)
-    console.log(cyan(`┃ ${green(`✔ Template cloned successfully to: ${targetDir}`)}`))
+    console.log(cyan(`┃ ${green(`Template cloned successfully to: ${targetDir}`)}`))
   } catch (err) {
     console.error(`❌ Failed to clone template: ${err.message}`)
     process.exit(1)
