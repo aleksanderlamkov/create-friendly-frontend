@@ -95,8 +95,7 @@ const run = async () => {
   }
 
   console.log(cyan('┃'))
-  console.log(cyan(`┃ ${bold('◉ Final step →')} Run the following commands:\n`))
-  console.log(cyan('┃'))
+  console.log(cyan(`┃ ${bold('◉ Final step →')} Run the following commands:`))
 
   if (name.trim() !== '.') {
     console.log(`\n  cd ${name}`)
