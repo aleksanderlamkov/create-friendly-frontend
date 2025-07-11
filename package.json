@@ -28,6 +28,10 @@
     "url": "https://github.com/aleksanderlamkov/create-friendly-frontend/issues"
   },
   "homepage": "https://github.com/aleksanderlamkov/create-friendly-frontend#readme",
+  "scripts": {
+    "publish:next": "npm version prerelease --preid=next && npm publish --tag next",
+    "publish:latest": "npm version patch && npm publish"
+  },
   "dependencies": {
     "degit": "^2.8.4",
     "execa": "^9.6.0",
