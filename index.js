@@ -4,8 +4,19 @@ import prompts from 'prompts'
 import path from 'path'
 import { existsSync, readdirSync, rmSync } from 'fs'
 import degit from 'degit'
+import { blue, cyan, green, bold } from 'kolorist'
+
+const showLogo = () => {
+  console.log()
+  console.log(cyan('╭────────────────────────────────────────────╮'))
+  console.log(cyan('│') + '  ' + bold(blue('   Friendly Frontend Starter CLI   ')) + '  ' + cyan('│'))
+  console.log(cyan('╰────────────────────────────────────────────╯'))
+  console.log()
+}
 
 const run = async () => {
+  console.log(cyan('┃'))
+  console.log(cyan(`┃ ${bold('◉ Step 1:')} Choose a template`))
   const { useTS } = await prompts({
     type: 'select',
     name: 'useTS',
@@ -16,7 +27,10 @@ const run = async () => {
     ],
     initial: 0
   })
+  console.log(cyan(`┃   ${green(`✔ You selected the ${useTS ? 'TypeScript' : 'JavaScript'} template`)}`))
+  console.log(cyan('┃'))
 
+  console.log(cyan(`┃ ${bold('◉ Step 2:')} Name your project`))
   const { name } = await prompts({
     type: 'text',
     name: 'name',
@@ -25,11 +39,16 @@ const run = async () => {
     validate: name => name.trim().length ? true : 'Please enter a project name.'
   })
 
+  const targetDir = name.trim() === '.' ? process.cwd() : path.resolve(process.cwd(), name)
+  const visibleName = name.trim() === '.' ? path.basename(targetDir) : name
+
+  console.log(cyan(`┃   ${green(`✔ Project will be created in: ${targetDir}`)}`))
+  console.log(cyan('┃'))
+
+  console.log(cyan(`┃ ${bold('◉ Step 3:')} Checking target directory...`))
   const repo = useTS
     ? 'AleksanderLamkov/friendly-frontend-starter-ts'
     : 'AleksanderLamkov/friendly-frontend-starter'
-
-  const targetDir = name.trim() === '.' ? process.cwd() : path.resolve(process.cwd(), name)
 
   if (existsSync(targetDir) && readdirSync(targetDir).length > 0) {
     const { action } = await prompts({
@@ -58,24 +77,23 @@ const run = async () => {
     }
   }
 
+  console.log(cyan(`┃ ${bold('◉ Step 4:')} Downloading template into "${visibleName}"...`))
   const emitter = degit(repo, {
     cache: false,
     force: true,
     verbose: false
   })
 
-  const visibleName = name.trim() === '.' ? path.basename(targetDir) : name
-  console.log(`\n📦 Downloading template into "${visibleName}"...\n`)
-
   try {
     await emitter.clone(targetDir)
-    console.log(`📁 Project created in: ${targetDir}`)
+    console.log(cyan(`┃   ${green(`✔ Template cloned successfully to: ${targetDir}`)}`))
   } catch (err) {
     console.error(`❌ Failed to clone template: ${err.message}`)
     process.exit(1)
   }
 
-  console.log('\n✅ Done! Now run:')
+  console.log(cyan('┃'))
+  console.log(cyan(`┃ ${bold('◉ Final step:')} Next commands:`))
 
   if (name.trim() !== '.') {
     console.log(`\n  cd ${name}`)
@@ -85,4 +103,5 @@ const run = async () => {
   console.log('  npm run start\n')
 }
 
+showLogo()
 run()
