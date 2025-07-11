@@ -3,13 +3,11 @@
 import prompts from 'prompts'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import fs from 'fs'
-import { promisify } from 'util'
-import { execSync } from 'child_process'
+import fs from 'fs/promises'
+import { existsSync, readdirSync, rmSync } from 'fs'
 import degit from 'degit'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const access = promisify(fs.access)
 
 const run = async () => {
   const { ts } = await prompts({
@@ -32,16 +30,32 @@ const run = async () => {
 
   const targetDir = name.trim() === '.' ? process.cwd() : path.resolve(process.cwd(), name)
 
-  // Проверим, что директория либо пуста, либо не существует
-  try {
-    await access(targetDir, fs.constants.F_OK)
-    const files = fs.readdirSync(targetDir)
-    if (files.length > 0) {
-      console.error(`❌ Directory "${name}" is not empty.`)
-      process.exit(1)
+  // Проверка существующей непустой директории
+  if (existsSync(targetDir) && readdirSync(targetDir).length > 0) {
+    const { action } = await prompts({
+      type: 'select',
+      name: 'action',
+      message: `Directory "${name}" is not empty. How would you like to proceed?`,
+      choices: [
+        { title: '❌ Cancel installation', value: 'cancel' },
+        { title: '🧹 Remove all files and continue', value: 'clear' },
+        { title: '✅ Keep files and continue', value: 'keep' }
+      ]
+    })
+
+    if (action === 'cancel') {
+      console.log('🚫 Operation cancelled.')
+      process.exit(0)
     }
-  } catch {
-    // Ок — директории не существует
+
+    if (action === 'clear') {
+      const files = readdirSync(targetDir)
+      for (const file of files) {
+        if (file === '.git') continue
+        rmSync(path.join(targetDir, file), { recursive: true, force: true })
+      }
+      console.log('🧹 Cleared directory.')
+    }
   }
 
   const emitter = degit(repo, {
@@ -51,10 +65,15 @@ const run = async () => {
   })
 
   console.log(`\n📦 Downloading template into "${name}"...\n`)
-  await emitter.clone(targetDir)
+  try {
+    await emitter.clone(targetDir)
+  } catch (err) {
+    console.error(`❌ Failed to clone template: ${err.message}`)
+    process.exit(1)
+  }
 
   console.log('\n✅ Done! Now run:')
-  if (name !== '.') console.log(`\n  cd ${name}`)
+  if (name.trim() !== '.') console.log(`\n  cd ${name}`)
   console.log('  npm install')
   console.log('  npm run start\n')
 }
