@@ -9,18 +9,17 @@ import { blue, cyan, green, bold } from 'kolorist'
 const showLogo = () => {
   console.log()
   console.log(cyan('╭────────────────────────────────────────────╮'))
-  console.log(cyan('│') + '  ' + bold(blue('   Friendly Frontend Starter CLI   ')) + '  ' + cyan('│'))
+  console.log(cyan('│') + '  ' + bold(blue('   Friendly Frontend Starter CLI   ')) + '       ' + cyan('│'))
   console.log(cyan('╰────────────────────────────────────────────╯'))
   console.log()
 }
 
 const run = async () => {
   console.log(cyan('┃'))
-  console.log(cyan(`┃ ${bold('◉ Step 1:')} Choose a template`))
+  console.log(cyan(`┃ ${bold('◉ Step 1:')} Choose a template:`))
   const { useTS } = await prompts({
     type: 'select',
     name: 'useTS',
-    message: 'Choose a template:',
     choices: [
       { title: 'JavaScript', value: false },
       { title: 'TypeScript', value: true },
@@ -30,11 +29,10 @@ const run = async () => {
   console.log(cyan(`┃   ${green(`✔ You selected the ${useTS ? 'TypeScript' : 'JavaScript'} template`)}`))
   console.log(cyan('┃'))
 
-  console.log(cyan(`┃ ${bold('◉ Step 2:')} Name your project`))
+  console.log(cyan(`┃ ${bold('◉ Step 2:')} Name your project (or "." to use current directory):`))
   const { name } = await prompts({
     type: 'text',
     name: 'name',
-    message: 'Project name (or "." to use current directory):',
     placeholder: 'my-app',
     validate: name => name.trim().length ? true : 'Please enter a project name.'
   })
@@ -54,7 +52,7 @@ const run = async () => {
     const { action } = await prompts({
       type: 'select',
       name: 'action',
-      message: `Directory "${name}" is not empty. How would you like to proceed?`,
+      message: `┃ Directory "${name}" is not empty. How would you like to proceed?`,
       choices: [
         { title: '❌ Cancel installation', value: 'cancel' },
         { title: '🧹 Remove all files and continue', value: 'clear' },
