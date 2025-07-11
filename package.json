@@ -1,0 +1,35 @@
+{
+  "name": "create-friendly-frontend",
+  "version": "1.0.0",
+  "bin": {
+    "create-friendly-frontend": "./index.js"
+  },
+  "type": "module",
+  "description": "Удобный старт для вёрстки с JSX: всё уже настроено",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aleksanderlamkov/create-friendly-frontend.git"
+  },
+  "keywords": [
+    "starter",
+    "frontend",
+    "jsx",
+    "html",
+    "scss",
+    "vite",
+    "minista",
+    "create",
+    "cli"
+  ],
+  "author": "Aleksander Lamkov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aleksanderlamkov/create-friendly-frontend/issues"
+  },
+  "homepage": "https://github.com/aleksanderlamkov/create-friendly-frontend#readme",
+  "dependencies": {
+    "execa": "^9.6.0",
+    "prompts": "^2.4.2"
+  }
+}
