@@ -9,7 +9,7 @@ import { blue, cyan, green, bold } from 'kolorist'
 const showLogo = () => {
   console.log()
   console.log(cyan('╭────────────────────────────────────────────╮'))
-  console.log(cyan('│     ') + bold(blue('Friendly Frontend Starter CLI')) + cyan('     │'))
+  console.log(cyan('│') + bold(blue('     Friendly Frontend Starter CLI     ')) + cyan('│'))
   console.log(cyan('╰────────────────────────────────────────────╯'))
   console.log()
 }
