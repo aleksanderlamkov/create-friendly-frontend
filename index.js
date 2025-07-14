@@ -5,6 +5,11 @@ import path from 'path'
 import { existsSync, readdirSync, rmSync } from 'fs'
 import degit from 'degit'
 import { blue, cyan, green, bold } from 'kolorist'
+import minimist from 'minimist'
+
+const argv = minimist(process.argv.slice(2))
+const forceTS = argv.ts === true
+const forceJS = argv.js === true
 
 const showLogo = () => {
   console.log()
@@ -16,18 +21,27 @@ const showLogo = () => {
 
 const run = async () => {
   console.log(cyan('┃'))
-  console.log(cyan(`┃ ${bold('◉ Step 1 →')} Choose a template:`))
-  const { useTS } = await prompts({
-    type: 'select',
-    name: 'useTS',
-    message: '',
-    choices: [
-      { title: 'JavaScript', value: false },
-      { title: 'TypeScript', value: true },
-    ],
-    initial: 0
-  })
-  console.log(cyan(`┃ ${green(`You selected the ${useTS ? 'TypeScript' : 'JavaScript'} template`)}`))
+
+  let useTS
+
+  if (forceTS || forceJS) {
+    useTS = forceTS
+    console.log(cyan(`┃ ${bold('◉ Step 1 →')} Skipping prompt — using ${useTS ? 'TypeScript' : 'JavaScript'} template (--${useTS ? 'ts' : 'js'})`))
+  } else {
+    console.log(cyan(`┃ ${bold('◉ Step 1 →')} Choose a template:`))
+    const response = await prompts({
+      type: 'select',
+      name: 'useTS',
+      message: '',
+      choices: [
+        { title: 'JavaScript', value: false },
+        { title: 'TypeScript', value: true },
+      ],
+      initial: 0
+    })
+    useTS = response.useTS
+    console.log(cyan(`┃ ${green(`You selected the ${useTS ? 'TypeScript' : 'JavaScript'} template`)}`))
+  }
   console.log(cyan('┃'))
 
   console.log(cyan(`┃ ${bold('◉ Step 2 →')} Name your project (or "." to use current directory):`))
