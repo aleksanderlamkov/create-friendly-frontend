@@ -115,7 +115,7 @@ const run = async () => {
     console.log(`\n  cd ${name}`)
   }
 
-  console.log('  npm install')
+  console.log('  npm install --force')
   console.log('  npm run start\n')
 }
 
